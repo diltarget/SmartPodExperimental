@@ -1,0 +1,24 @@
+boot the server?
+./node stuff.js
+
+http Parse?
+
+*calls live data
+localhost:8000/?type=live&call=yourcall
+
+returns commandline execution
+commands specified in data.xml
+
+*store data
+localhost:8000/?type=db&tag=sc....
+
+*sc is standard call
+You can specify any data and it will be stored
+
+/?type=db&tag=sc&temp=67 is valid
+
+/?type=db&tag=doge&catpower=9000 is valid
+
+TODO call data from database
+
+the sqlite3 database is stored under localdata

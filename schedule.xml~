@@ -1,0 +1,20 @@
+<events>
+<timer inteval="10000">
+<tag>
+dummy
+</tag>
+<log interval="temp">hello</log>
+</timer>
+
+<timer inteval="20000">
+<nolog>hello</nolog>
+</timer>
+
+<date minute="10" hour="15">
+<tag>
+dummy
+</tag>
+<log value="temp">hello</log>
+<log value="yo">wait</log>
+</date>
+</events>

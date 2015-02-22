@@ -1,0 +1,11 @@
+<commands>
+<hello>
+echo hello world
+</hello>
+<wait>
+sleep 5;echo hey hey hey
+</wait>
+<gettemp>
+python temp.py
+</gettemp>
+</commands>
