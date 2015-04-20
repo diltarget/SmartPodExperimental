@@ -1,0 +1,18 @@
+<schedule>
+<timer interval="1000">
+<nolog>
+<math call="add" a="5" b="5"/>
+</nolog>
+</timer>
+<date minute="15">
+<nolog>
+<math call="add" a="5" b="5"/>
+</nolog>
+<log>
+<tag>addition</tag>
+<val>
+<math call="add" a="1" b="1"/>
+</val>
+</log>
+</date>
+</schedule>

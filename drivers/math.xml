@@ -1,0 +1,5 @@
+<math>
+<add a="var" b="var">echo $(({a}+{b}))</add>
+<cat a="var" b="config">echo $(({a}+{b}))</cat>
+<call>echo hello</call>
+</math>
