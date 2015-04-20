@@ -8,7 +8,9 @@ var url = require('url');
 var fs = require('fs');
 var xml2js = require('xml2js');
 var exec = require('child_process').exec;
-var schedule = require('node-schedule');
+//var schedule = require('node-schedule');
+var driver = require('./driver.js');
+var schedule = require('./schedule.js');
 
 var commands;
 var events
@@ -20,134 +22,14 @@ fs.readFile(__dirname + '/live.xml', function(err, data) {
         console.dir(result);
         console.log('Done');
 		commands = result.commands;
-
+		console.log(commands.gettemp);
     });
 });
 
-/*fs.readFile(__dirname + '/schedule.xml', function(err, data) {
-    parser.parseString(data, function (err, result) {
-        console.dir(JSON.stringify(result));
-        console.log('Done');
-		events = result.events;
+driver.load();
+schedule.load();
 
-		for(var v = 0; v < events.timer.length; v++)
-		{
-			console.log(v);
-			setInterval(function() {
-				//console.log("MAN");
-				
-        		
-				for(var j = 0; j < events.timer[v].nolog.length; j++)
-				{
-					if(typeof commands[events.timer[v].nolog[j]] != 'undefined')
-					{
-
-						//console.log("MAN");
-						exec(commands[events.timer[v].nolog[j]], function (error, stdout, stderr) {
-							
-							//console.log(stdout);
-						});
-	
-					}
-				}
-
-				if(events.timer[v].tag != null)
-				{
-					//console.log("MAN");
-					var dbdata;
-										
-
-					for(var k = 0; k < events.timer[v].log.length; k++)
-					{
-
-						exec(commands[events.timer[v].log[k]._], function (error, stdout, stderr) {
-							dbdata[events.timer[v].log[k].$.value] = stdout;
-							
-						});
-
-					}
-
-					var b = JSON.stringify(o);
-
-					var stamp = Math.floor(Date.now() / 1000);
-					db.query("INSERT INTO localdata VALUES ( @s , @t , @data )", {s:stamp, t: evets.timer[v].tag, data:dbdata});
-
-				}
-
-    		}, events.timer[v].$.interval);
-	
-		}
-
-		for(var v = 0; v < events.date.length; v++)
-		{
-	
-			schedule.scheduleJob(events.date[v].$, function() {
-        		
-				for(var j = 0; j < events.date[v].nolog.length; j++)
-				{
-					if(commands[events.date[v].nolog[j]] != null)
-					{
-						exec(commands[events.date[v].nolog[j]], function (error, stdout, stderr) {
-							
-	
-						});
-	
-					}
-				}
-
-				if(events.date[v].tag != null)
-				{
-
-					var dbdata;
-										
-
-					for(var k = 0; k < events.date[v].log.length; k++)
-					{
-
-						exec(commands[events.date[v].log[k]._], function (error, stdout, stderr) {
-							dbdata[events.date[v].log[k].$.value] = stdout;
-							
-						});
-
-					}
-
-					var b = JSON.stringify(o);
-
-					var stamp = Math.floor(Date.now() / 1000);
-					db.query("INSERT INTO localdata VALUES ( @s , @t , @data )", {s:stamp, t: evets.date[v].tag, data:dbdata});
-
-				}
-
-    		});
-	
-		}
-		
-    });
-
-});*/
-
-setInterval(function(){
-
-	var dbdata;			
-	var list = [["temp","gettemp"]];
-	var tag = "record";						
-
-	for(var k = 0; k < list.length ; k++)
-	{
-		exec(commands[list[k][1]], function (error, stdout, stderr) {
-			dbdata[list[k][0]] = stdout;
-							
-		});
-
-	}
-	var b = JSON.stringify(o);
-
-	var stamp = Math.floor(Date.now() / 1000);
-	db.query("INSERT INTO localdata VALUES ( @s , @t , @data )", {s:stamp, t: evets.date[v].tag, data:dbdata});
-
-}, 5000);
-
-//db.run("CREATE TABLE localdata (time INTEGER, tag TEXT, data TEXT)");
+//console.log(driver.param("math","call",{}));
 
 function dbPush(data)
 {
@@ -196,22 +78,35 @@ var server = http.createServer(function (request, response) {
   var queryData = url.parse(request.url, true).query;
   response.writeHead(200, {"Content-Type": "text/plain"});
 	
+	//driver.param("math","add",{a:1,b:2}, function (out){console.log(out+"a");});
+	//console.log(driver.param("math","call",{}));
+
 	if (queryData.type) {
     // user told us their name in the GET request, ex: http://host:8000/?name=Tom
    
-		if(queryData.type === "live")
+		if(queryData.type === "call" && queryData.object != null)
 		{
-			console.log("MAN");
-			//response.end(call(queryData.call));
+			
 
-			if(commands[queryData.call] != null)
+			if(queryData.call == "new")
 			{
-				exec(commands[queryData.call], function (error, stdout, stderr) {
-					response.end(stdout) ;
-	
-				});
-	
+				driver.new(queryData[key],function(out){response.end(out)});
 			}
+			else
+			{
+				var o = {};
+	
+				Object.keys(queryData).forEach(function(key) {
+					if(key != "type" && key != "object" && key != "call")
+					{
+						o[key] = queryData[key];
+					}
+				});
+	 
+
+				driver.param(queryData.object, queryData.call, o, function(out){response.end(out)});
+			}
+			
 
 		}
 		else if(queryData.type === "push")

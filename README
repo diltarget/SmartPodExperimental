@@ -8,10 +8,10 @@ node server.js
 http Parse?
 
 *calls live data
-localhost:8000/?type=live&call=yourcall
+localhost:8000/?type=call&object=driver&call=call
 
 returns commandline execution
-commands specified in data.xml
+drivers specified in driver folder
 
 *store data
 localhost:8000/?type=db&tag=sc....
