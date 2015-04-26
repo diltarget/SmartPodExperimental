@@ -62,6 +62,10 @@ exports.param = function(object,func, param, callback){
 			{
 				command = command.replace(new RegExp("{"+key+"}","g"), "{all}");
 			}
+			else if(data[object][func][0]['$'][key]==="name")
+			{
+				command = command.replace(new RegExp("{"+key+"}","g"), "{name}");
+			}
 		});
 	}
 	else{
@@ -70,19 +74,21 @@ exports.param = function(object,func, param, callback){
 
 
 	if(command.indexOf("{all}")<0){
-		console.log(command);
+		
 		exec(command, function (error, stdout, stderr) {
 		
 			callback(stdout);
-		
+			
 		});
 	}
 	else
 	{
 		var list = config.list(object);
 		Object.keys(list).forEach(function(key){
-			exec(command.replace("{all}"/g,list[key]), function (error, stdout, stderr) {
-
+			var ctemp=command.replace(new RegExp("{all}","g"),list[key]);
+			ctemp=ctemp.replace(new RegExp("{name}","g"),key);
+			exec(ctemp, function (error, stdout, stderr) {
+				//console.log(stdout);
 				callback(stdout);
 
 			});

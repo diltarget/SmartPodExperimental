@@ -10,24 +10,15 @@ var xml2js = require('xml2js');
 var exec = require('child_process').exec;
 //var schedule = require('node-schedule');
 var driver = require('./driver.js');
-var schedule = require('./schedule.js');
+//var schedule = require('./schedule.js');
 
 var commands;
 var events
 var eventlist = [];
 
 var parser = new xml2js.Parser();
-fs.readFile(__dirname + '/live.xml', function(err, data) {
-    parser.parseString(data, function (err, result) {
-        console.dir(result);
-        console.log('Done');
-		commands = result.commands;
-		console.log(commands.gettemp);
-    });
-});
-
 driver.load();
-schedule.load();
+//schedule.load();
 
 //console.log(driver.param("math","call",{}));
 
@@ -92,6 +83,10 @@ var server = http.createServer(function (request, response) {
 			{
 				driver.new(queryData[key],function(out){response.end(out)});
 			}
+			else if(queryData.call == undefined)
+			{
+				driver.param(queryData.object, "call", o, function(out){response.end(out)});
+			}
 			else
 			{
 				var o = {};
@@ -104,7 +99,7 @@ var server = http.createServer(function (request, response) {
 				});
 	 
 
-				driver.param(queryData.object, queryData.call, o, function(out){response.end(out)});
+				driver.param(queryData.object, queryData.call, o, function(out){response.end(out);console.log(out);});
 			}
 			
 
