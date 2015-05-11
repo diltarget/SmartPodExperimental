@@ -21,7 +21,8 @@ exports.load = function(){
     		if (err) throw err;
     	var c=0;
     	files.forEach(function(file){
-		if(file.indexOf(".xml") - file.length != -4) return;
+		if(file.indexOf(".xml") - file.length == -4)
+		{
         	c++;
 		//console.log(file);
         	fs.readFile(dir+'/'+file,'utf-8',function(err,html){
@@ -32,9 +33,22 @@ exports.load = function(){
   				console.log(key);
 			});
 		});
+		});
+		}
+		else if(file.indexOf(".js") - file.length == -3)
+		{
+        	
+  				data[file.substring(0,file.length-3)]=require('./drivers/'+file);
+  				console.log(file.substring(0,file.length-3));
+
+		
+		}
+		else
+		{
+			return;
+		}
         });
     });
-});
 
 config.load();
 
@@ -45,7 +59,16 @@ exports.param = function(object,func, param, callback){
 	if(data[object]===undefined) return false;
 	if(data[object][func]===undefined) return false;	
 
+	if(typeof data[object][func] === "function")
+	{
+
+		data[object][func](param,callback);
+		return;
+
+	}
+
 	var command="";
+
 	if(typeof data[object][func][0] != "string"){
 		command=data[object][func][0]['_'];
 
