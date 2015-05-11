@@ -17,7 +17,24 @@ var events
 var eventlist = [];
 
 var parser = new xml2js.Parser();
-driver.load();
+driver.load(function(){
+fs.readFile('main.xml','utf-8',function(err,html){
+            	if (err) throw err;
+		parser.parseString(html, function (err, result) {
+			result=result['main'];
+			Object.keys(result).forEach(function(key) {
+  				Object.keys(result[key]).forEach(function(val){
+					if(typeof result[key][val] != "object") return;
+					Object.keys(result[key][val]).forEach(function(m){
+					Object.keys(result[key][val][m]).forEach(function(l){
+						driver.param(key, m,result[key][val][m][l]['$'], function(out){console.log("@MAIN: "+out);});
+					});
+					});
+				});
+			});
+		});
+	});
+});
 //schedule.load();
 
 //console.log(driver.param("math","call",{}));
@@ -98,7 +115,7 @@ var server = http.createServer(function (request, response) {
 					}
 				});
 	 
-
+		
 				driver.param(queryData.object, queryData.call, o, function(out){response.end(out);console.log(out);});
 			}
 			

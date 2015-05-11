@@ -15,7 +15,7 @@ var config = require('./config.js');
 var data={};
 var dir=__dirname+'/drivers'; 
 
-exports.load = function(){
+exports.load = function(callback){
 
 	fs.readdir(dir,function(err,files){
     		if (err) throw err;
@@ -48,9 +48,11 @@ exports.load = function(){
 			return;
 		}
         });
-    });
 
-config.load();
+console.log("hello");
+config.load(callback);
+
+    });
 
 }
 

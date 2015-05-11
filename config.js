@@ -14,7 +14,7 @@ var parser = new xml2js.Parser();
 var data={};
 var dir=__dirname+'/drivers/config'; 
 
-exports.load = function(){
+exports.load = function(callback){
 
 	fs.readdir(dir,function(err,files){
     		if (err) throw err;
@@ -30,6 +30,7 @@ exports.load = function(){
         });
     });
 });
+callback();
 }
 
 function writeFile(object)
