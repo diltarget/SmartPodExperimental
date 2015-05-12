@@ -1,0 +1,6 @@
+<timer interval="5000">
+<math>
+<add a="5" b="7"/>
+<add a="667" b="44"/>
+</math>
+</timer>

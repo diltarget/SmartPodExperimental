@@ -1,5 +1,5 @@
 //Dylan Thomas 2015
-//GNUPLV2
+//GNUPLV3
 
 var dblite = require('dblite');
 var db = dblite('localdata');
@@ -11,30 +11,16 @@ var exec = require('child_process').exec;
 //var schedule = require('node-schedule');
 var driver = require('./driver.js');
 //var schedule = require('./schedule.js');
+var scripts = require('./script.js');
+
+scripts.load(function(){});
 
 var commands;
 var events
 var eventlist = [];
 
 var parser = new xml2js.Parser();
-driver.load(function(){
-fs.readFile('main.xml','utf-8',function(err,html){
-            	if (err) throw err;
-		parser.parseString(html, function (err, result) {
-			result=result['main'];
-			Object.keys(result).forEach(function(key) {
-  				Object.keys(result[key]).forEach(function(val){
-					if(typeof result[key][val] != "object") return;
-					Object.keys(result[key][val]).forEach(function(m){
-					Object.keys(result[key][val][m]).forEach(function(l){
-						driver.param(key, m,result[key][val][m][l]['$'], function(out){console.log("@MAIN: "+out);});
-					});
-					});
-				});
-			});
-		});
-	});
-});
+driver.load(function(){});
 //schedule.load();
 
 //console.log(driver.param("math","call",{}));
