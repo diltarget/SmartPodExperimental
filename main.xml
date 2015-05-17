@@ -1,4 +1,4 @@
-<main>
+<main interval="{hello}">
 <math>
 <add a="2" b="5"/>
 <add a="11" b="19"/>
