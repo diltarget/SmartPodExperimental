@@ -2,7 +2,6 @@
 var dblite = require('dblite');
 var db = dblite('localdata');
 
-
 module.exports={
 	set: function(i,callback)
 	{

@@ -5,7 +5,7 @@ module.exports={
 		if(typeof o.interval === "undefined") return;
 		if(typeof parseInt(o.interval) === NaN) return;
 		
-		setInterval(function(){callback({dog:"stuff"})},parseInt(o.interval));
+		setInterval(function(){callback({time:Math.floor(Date.now() / 1000)})},parseInt(o.interval));
 
 	}
 };
