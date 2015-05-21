@@ -4,6 +4,6 @@
 <add a="667" b="44"/>
 </math>
 <datastore>
-<set store="test" tag="dog" val="{dog}"/>
+<set store="time" tag="time" val="{time}"/>
 </datastore>
 </timer>

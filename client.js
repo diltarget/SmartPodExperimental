@@ -46,7 +46,7 @@ var server = http.createServer(function (request, response) {
 			});
  
 	
-			driver.param(queryData.object, queryData.call, o, function(out){response.end(out);console.log(out);});
+			driver.param(queryData.object, queryData.call, o, function(out){response.end(out);console.log("Client: "+out);});
 		}
 		
 
