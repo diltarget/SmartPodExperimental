@@ -64,14 +64,21 @@ function dbPush(data)
 function dbQuery(tag,limit, callback)
 {
 
-db.query("SELECT * FROM localdata WHERE tag = @tag ORDER BY time DESC LIMIT @limit",{tag: tag, limit: limit},
-  					function (err, rows) {
-						for(var i = 0; i < rows.length; i++)
-						{
-							rows[i][0] = parseInt(rows[i][0]);
-    						rows[i][2] = JSON.parse(rows[i][2]);
-  						}
-						callback(JSON.stringify(rows));
-					}
-				);
+	db.query("SELECT * FROM localdata WHERE tag = @tag ORDER BY time DESC LIMIT @limit",{tag: tag, limit: limit},
+  		function (err, rows) {
+			console.log(typeof rows);
+			if(rows == null)
+			{
+				callback(JSON.stringify({}));
+				return;
+				
+			}
+			for(var i = 0; i < rows.length; i++)
+			{
+				rows[i][0] = parseInt(rows[i][0]);
+    				rows[i][2] = JSON.parse(rows[i][2]);
+  			}
+			callback(JSON.stringify(rows));
+		}
+	);
 }
