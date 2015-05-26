@@ -19,7 +19,7 @@ exports.load = function(callback){
 		{
 
 		fs.readFile(dir+'/'+file,'utf-8',function(err,html){
-
+		
 		parser.parseString(html, function (err, result) {
 			console.log(result);
 			Object.keys(result).forEach(function(s) {
@@ -46,6 +46,26 @@ exports.load = function(callback){
 
 }
 
+exports.call = function(f,par,callback){
+
+	fs.readFile(dir+'/'+f+'.xml','utf-8',function(err,html){
+		if(err){
+			console.log(err)
+			return;
+		}
+
+		parser.parseString(html, function (err, result) {
+			
+			Object.keys(result).forEach(function(s) {
+				result = result[s]
+				run(par,result,callback);
+			});
+		});
+			
+	});
+	
+}
+
 function create_event(event,par, program){
 
 	if(events.exist(event) != true && event != "main") return;
@@ -67,7 +87,7 @@ function create_event(event,par, program){
 
 						p[g]=r[p[g].substring(1, p[g].length-1)];
 					});
-					
+						
 					drivers.param(key, m,p, function(out){
 						console.log("@"+event+": "+out);
 					});
@@ -75,5 +95,36 @@ function create_event(event,par, program){
 			});
 		});
 	});
+
 	});
+}
+
+function run(r,program,callback){
+	if(typeof r === "undefined") r={};
+	Object.keys(program).forEach(function(key) {
+		if(key==="$"){ return;}
+		if(typeof program[key] != "object") return;
+  		Object.keys(program[key]).forEach(function(val){
+			if(typeof program[key][val] != "object") return;
+			Object.keys(program[key][val]).forEach(function(m){
+				Object.keys(program[key][val][m]).forEach(function(l){
+					var p = program[key][val][m][l]['$'];
+					
+					Object.keys(p).forEach(function(g){
+							
+						if(typeof p[g] != "string") return;
+						if(p[g].substring(0,1) != "{") return;
+						if(p[g].substring(p[g].length-1, p[g].length) != "}") return;
+						if(typeof r[p[g].substring(1, p[g].length-1)] === "undefined") return;
+
+						p[g]=r[p[g].substring(1, p[g].length-1)];
+					});
+					
+						
+					drivers.param(key, m,p, function(out){callback(out)});
+				});
+			});
+		});
+	});
+
 }
