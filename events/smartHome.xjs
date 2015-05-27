@@ -1,0 +1,54 @@
+var RFM69 = require('rfm69');
+
+var config = {
+    encryptionKey: "sampleEncryptKey",
+    highPower: true,
+    nodeAddress: 1,
+    broadcastAddress: 100,
+    verbose: false,
+    config: 'lowPowerLab'
+};
+
+// configure a module
+var rfm69 = new RFM69(config);
+
+rfm69.onReady = function() {
+    // module initialized
+    rfm69.listen();  // can receive
+    rfm69.send("hi");
+};
+
+// start up the module
+rfm69.initialize();
+
+// clean up on shutdown
+process.on('SIGINT', function() {
+    rfm69.close();
+    process.exit();
+});
+
+module.exports={
+	event: function(o,callback){
+		if(typeof callback != "function" ) return;
+		if(typeof o === "undefined") return;
+
+		rfm69.onMessage = function(buffer) {
+    			var in = buffer.split(",");
+			var r;
+			
+			for(var j = 1; j < in.length; j=j+2);
+			{
+
+				if(typeof o[in[j]] != "undefined")
+				{
+
+					callback({device:in[0], header:in[j], value:in[j+1]});
+					
+				}
+
+			}
+
+		};
+
+	}
+};

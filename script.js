@@ -83,6 +83,7 @@ function create_event(event,par, program){
 						if(typeof p[g] != "string") return;
 						if(p[g].substring(0,1) != "{") return;
 						if(p[g].substring(p[g].length-1, p[g].length) != "}") return;
+						if(p[g].substring(1, p[g].length-1) === "time") p[g] = ""+Math.floor(Date.now() / 1000);
 						if(typeof r[p[g].substring(1, p[g].length-1)] === "undefined") return;
 
 						p[g]=r[p[g].substring(1, p[g].length-1)];
@@ -115,6 +116,7 @@ function run(r,program,callback){
 						if(typeof p[g] != "string") return;
 						if(p[g].substring(0,1) != "{") return;
 						if(p[g].substring(p[g].length-1, p[g].length) != "}") return;
+						if(p[g].substring(1, p[g].length-1) === "time") p[g] = Math.floor(Date.now() / 1000);
 						if(typeof r[p[g].substring(1, p[g].length-1)] === "undefined") return;
 
 						p[g]=r[p[g].substring(1, p[g].length-1)];

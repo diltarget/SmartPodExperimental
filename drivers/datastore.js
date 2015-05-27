@@ -33,7 +33,7 @@ module.exports={
 
 		if(typeof store[i.store] === "undefined") return;
 
-		callback(store[i.store]);
+		callback(JSON.stringify(store[i.store]));
 	}
 	
 };

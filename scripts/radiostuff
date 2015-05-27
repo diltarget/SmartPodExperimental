@@ -1,0 +1,9 @@
+<smartHome tempc="" tempf="" hum="" light="">
+<datastore>
+<set store="{header}" tag="{device}" val="{value}"/>
+</datastore>
+<log>
+<set tag="{header}" device="{device}" val="{value}"/>
+<get tag="{header}" since="0"/>
+</log>
+</smartHome>
